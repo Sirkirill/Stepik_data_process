@@ -12,17 +12,13 @@ class StepikSpider(scrapy.Spider):
 
     def parse(self, response):
         results = json.loads(response.body)
+        page = results['meta']['page']
+        with open(f'page_{page}.json', 'w') as json_file:
+            json.dump(results, json_file)
         for result in results:
             try:
-                page = results['meta']['page']
-                next_url = f'https://stepik.org:443/api/courses?page={page}'
-                yield response.follow(next_url, callback=self.parse_details)
+                next_url = f'https://stepik.org:443/api/courses?page={page+1}'
+                yield response.follow(next_url, callback=self.parse)
             except:
                 continue
 
-    def parse_details(self, response):
-        result = json.loads(response.body)
-        return (result)
-
-        with open('info.json', 'w') as json_file:
-            json.dump(result, json_file)
