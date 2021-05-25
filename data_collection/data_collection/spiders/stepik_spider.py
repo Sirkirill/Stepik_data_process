@@ -6,19 +6,31 @@ import scrapy
 
 class StepikSpider(scrapy.Spider):
     name = "stepik"
+    custom_settings = {
+        'JOBDIR': 'crawls/stepik-1',
+        'CLOSESPIDER_PAGECOUNT': '10'
+    }
     start_urls = [
         'https://stepik.org:443/api/courses?page=1',
     ]
 
     def parse(self, response):
         results = json.loads(response.body)
-        page = results['meta']['page']
-        with open(f'page_{page}.json', 'w') as json_file:
-            json.dump(results, json_file)
-        for result in results:
-            try:
-                next_url = f'https://stepik.org:443/api/courses?page={page+1}'
-                yield response.follow(next_url, callback=self.parse)
-            except:
-                continue
+        next_page = results['meta']['page']+1
+        courses = results['courses']
+        with open(f'data.json', 'a') as json_file:
+            for cours in courses:
+                data = {
+                    'id': cours['id'],
+                    'learners_count': cours['learners_count'],
+                    'is_popular': cours['is_popular'],
+                }
+                json.dump(data, json_file)
+                json_file.write('\n')
+        while results['meta']['has_next']:
+            next_url = f'https://stepik.org:443/api/courses?page={next_page}'
+            yield response.follow(next_url, callback=self.parse)
+
+
+
 
