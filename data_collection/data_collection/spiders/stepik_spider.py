@@ -18,6 +18,7 @@ class StepikSpider(scrapy.Spider):
         results = json.loads(response.body)
         next_page = results['meta']['page']+1
         courses = results['courses']
+
         with open(f'data.json', 'a') as json_file:
             for cours in courses:
                 data = {
@@ -27,6 +28,7 @@ class StepikSpider(scrapy.Spider):
                 }
                 json.dump(data, json_file)
                 json_file.write('\n')
+
         while results['meta']['has_next']:
             next_url = f'https://stepik.org:443/api/courses?page={next_page}'
             yield response.follow(next_url, callback=self.parse)
