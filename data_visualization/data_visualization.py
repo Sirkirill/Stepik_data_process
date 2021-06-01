@@ -13,4 +13,8 @@ data = pd.read_json(json_file, lines=True)
 df = pd.DataFrame(data)
 
 df["learners_count"].plot(kind="bar")
+
+plt.xlabel("Top courses")
+plt.ylabel("Learners count")
+plt.savefig(path_to_jsons + 'plot.png')
 plt.show()
