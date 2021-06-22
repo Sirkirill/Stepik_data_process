@@ -1,8 +1,7 @@
 import json
-from pprint import pprint
 
+from decouple import config
 import scrapy
-
 
 class StepikSpider(scrapy.Spider):
     name = "stepik"
