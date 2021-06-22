@@ -4,10 +4,14 @@ import pytest
 import requests
 import pandas as pd
 import matplotlib.pyplot as plt
+from decouple import config
 from pyspark.sql import SparkSession
 from matplotlib.testing.decorators import image_comparison
 
 from data_processing.data_processing import start_spark, collect_n_max_value, extract_data
+
+
+BASE_DIR = config('BASE_DIR', default='')
 
 
 def test_stepik_connection():
@@ -20,7 +24,7 @@ def test_stepik_connection():
 def test_spider():
     url = 'https://stepik.org:443/api/courses?page=1'
     response = requests.get(url)
-    results = json.loads(response.body)
+    results = response.json()
     next_page = results['meta']['page']+1
 
     assert next_page == 2
@@ -52,7 +56,7 @@ def test_collect_n_max_value(spark_session):
 
 @pytest.mark.usefixtures('spark_session')
 def test_collect_data(spark_session):
-    path = 'file:///Users/kbarkalov/PycharmProjects/Stepik_data_process/test.json'
+    path = BASE_DIR + '/test.json'
     df = extract_data(spark_session, path)
 
     assert df.count() == 5
@@ -61,7 +65,7 @@ def test_collect_data(spark_session):
 @image_comparison(baseline_images=['line_dashes'], remove_text=True,
                   extensions=['png'])
 def test_visualization():
-    path = 'file:///Users/kbarkalov/PycharmProjects/Stepik_data_process/test.json'
+    path = BASE_DIR + '/test.json'
 
     data = pd.read_json(path, lines=True)
     df = pd.DataFrame(data)
