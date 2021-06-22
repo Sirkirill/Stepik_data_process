@@ -131,7 +131,10 @@ dmypy.json
 .DS_Store
 .data_collection/crawls
 test.json
+**/*.json
 data_top/
+data_top/._SUCCESS.crc
+data_top/_SUCCESS
 data_top/plot.png
 data_collection/crawls/
 data_collection/data.json
