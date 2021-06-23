@@ -1,6 +1,8 @@
-
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
+from decouple import config
+
+BASE_DIR = config('BASE_DIR')
 
 
 def start_spark(app_name):
@@ -10,7 +12,7 @@ def start_spark(app_name):
 
 
 def extract_data(spark):
-    path = 'file:///Users/kbarkalov/PycharmProjects/Stepik_data_process/data_processing/'
+    path = BASE_DIR + '/data_processing/'
     data_frame = spark.read.load(path, format='json')
 
     return data_frame
@@ -28,6 +30,6 @@ spark_sess = spark_builder.getOrCreate()
 df = extract_data(spark_sess)
 top5 = collect_n_max_value(5, df)
 
-save_folder = '/Users/kbarkalov/PycharmProjects/Stepik_data_process/data_top'
+save_folder = BASE_DIR + '/data_top'
 top5.write.format('json').mode("overwrite").save(save_folder)
 top5.show()

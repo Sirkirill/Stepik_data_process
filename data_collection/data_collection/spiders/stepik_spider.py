@@ -1,8 +1,9 @@
 import json
-from pprint import pprint
 
 import scrapy
+from decouple import config
 
+BASE_DIR = config('BASE_DIR')
 
 class StepikSpider(scrapy.Spider):
     name = "stepik"
@@ -19,7 +20,7 @@ class StepikSpider(scrapy.Spider):
         next_page = results['meta']['page']+1
         courses = results['courses']
 
-        with open(f'data.json', 'a') as json_file:
+        with open(BASE_DIR + '/data_processing/data.json', 'a') as json_file:
             for cours in courses:
                 data = {
                     'id': cours['id'],
