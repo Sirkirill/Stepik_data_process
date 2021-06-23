@@ -130,3 +130,8 @@ dmypy.json
 .idea/
 .DS_Store
 .data_collection/crawls
+
+**/*.json
+**/*.png
+data_top
+data_collection/crawls
