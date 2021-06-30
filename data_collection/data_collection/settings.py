@@ -12,8 +12,6 @@ BOT_NAME = 'data_collection'
 SPIDER_MODULES = ['data_collection.spiders']
 NEWSPIDER_MODULE = 'data_collection.spiders'
 
-FEED_EXPORTERS = {'avro': 'zuinnote.scrapy.contrib.bigexporters.AvroItemExporter'}
-
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'data_collection (+http://www.yourdomain.com)'
 
