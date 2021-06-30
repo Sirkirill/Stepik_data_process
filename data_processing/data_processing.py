@@ -6,30 +6,32 @@ BASE_DIR = config('BASE_DIR')
 
 
 def start_spark(app_name):
-    builder = SparkSession.builder.master(master='local').appName(app_name)
+    builder = SparkSession \
+        .builder\
+        .master(master='local')\
+        .appName(app_name)\
+        .getOrCreate()
 
     return builder
 
 
-def extract_data(spark):
-    path = BASE_DIR + '/data_processing/'
+def extract_data(spark, path):
     data_frame = spark.read.load(path, format='json')
 
     return data_frame
 
 
 def collect_n_max_value(n, data_frame):
-    df_transform = data_frame.orderBy('learners_count', ascending=False).limit(5)
+    df_transform = data_frame.orderBy('learners_count', ascending=False).limit(n)
 
     return df_transform
 
 
-spark_builder = start_spark('Stepik_processing')
-spark_sess = spark_builder.getOrCreate()
+if __name__ == "__main__":
+    spark_sess = start_spark('Stepik_processing')
+    df = extract_data(spark_sess, BASE_DIR + '/data_processing/')
+    top5 = collect_n_max_value(5, df)
 
-df = extract_data(spark_sess)
-top5 = collect_n_max_value(5, df)
-
-save_folder = BASE_DIR + '/data_top'
-top5.write.format('json').mode("overwrite").save(save_folder)
-top5.show()
+    save_folder = BASE_DIR + '/data_top'
+    top5.write.format('json').mode("overwrite").save(save_folder)
+    top5.show()

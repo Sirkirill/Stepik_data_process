@@ -131,7 +131,7 @@ dmypy.json
 .DS_Store
 .data_collection/crawls
 
-**/*.json
-**/*.png
+data_processing/data.json
+result_images
 data_top
 data_collection/crawls
