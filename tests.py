@@ -1,15 +1,19 @@
 import json
 
 import pytest
+import scrapy
 import requests
 import pandas as pd
 import matplotlib.pyplot as plt
+from scrapy.http import Response, Request, TextResponse
+from scrapy.http import HtmlResponse
 from decouple import config
 from pyspark.sql import SparkSession
 from matplotlib.testing.decorators import image_comparison
 from chispa.dataframe_comparer import *
 from pandas.testing import assert_frame_equal
 
+from data_collection.data_collection.spiders.stepik_spider import StepikSpider
 from data_processing.data_processing import start_spark, collect_n_max_value, extract_data
 from data_visualization.data_visualization import pandas_df, visualize
 
@@ -23,7 +27,7 @@ def test_stepik_connection():
     assert response.status_code == 200
 
 
-def test_spider():
+def test_next_url():
     url = 'https://stepik.org:443/api/courses?page=1'
     response = requests.get(url)
     results = response.json()
@@ -94,3 +98,21 @@ def test_pandas_df():
 def test_line_dashes():
     path = BASE_DIR + '/test_data/test_top_data/'
     visualize(path)
+
+
+def test_spider():
+    url = "http://jrmlw.mocklab.io/thing/8?page=1"
+    request = Request(url=url)
+    response = requests.get(url)
+    body = response.content
+    scrapy_response = Response(url, request=request, body=body)
+    result = StepikSpider().parse(scrapy_response)
+    callback = 0
+    for item in result:
+        if type(item) is dict:  # result is generator so items - all his yield(4 items and 1 request)
+            assert item['id'] is not None
+            assert item['learners_count'] is not None
+            callback += 1
+        else:
+            assert callback == 4
+            assert item.url.endswith('page=2')

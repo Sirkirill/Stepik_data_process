@@ -6,7 +6,7 @@
 import scrapy
 
 
-class DataCollectionItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class StepikItem(scrapy.Item):
+    id = scrapy.Field()
+    learners_count = scrapy.Field()
+    is_popular = scrapy.Field()

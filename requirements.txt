@@ -1,0 +1,13 @@
+chispa==0.8.2
+coverage==5.5
+matplotlib==3.4.2
+numpy==1.20.3
+pandas==1.2.4
+py==1.10.0
+py4j==0.10.9
+pyspark==3.1.1
+pytest==6.2.4
+pytest-cov==2.12.1
+python-decouple==3.4
+requests==2.25.1
+Scrapy==2.5.0
