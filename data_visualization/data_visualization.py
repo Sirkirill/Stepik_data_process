@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from decouple import config
 
-BASE_DIR = config('BASE_DIR')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def pandas_df(path_to_jsons):

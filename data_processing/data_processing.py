@@ -1,9 +1,10 @@
+import os
+from pathlib import Path
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
 from decouple import config
 
-BASE_DIR = config('BASE_DIR')
-
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def start_spark(app_name):
     builder = SparkSession \

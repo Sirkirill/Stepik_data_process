@@ -3,8 +3,9 @@ import json
 import scrapy
 from decouple import config
 from ..items import StepikItem
+import os
 
-BASE_DIR = config('BASE_DIR')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 
 class StepikSpider(scrapy.Spider):
