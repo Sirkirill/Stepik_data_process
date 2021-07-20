@@ -1,4 +1,5 @@
 import json
+import os
 
 import pytest
 import scrapy
@@ -17,7 +18,7 @@ from data_collection.data_collection.spiders.stepik_spider import StepikSpider
 from data_processing.data_processing import start_spark, collect_n_max_value, extract_data
 from data_visualization.data_visualization import pandas_df, visualize
 
-BASE_DIR = config('BASE_DIR', default='')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def test_stepik_connection():
